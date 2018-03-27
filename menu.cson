@@ -1,0 +1,100 @@
+'menu': [
+  {
+    'label': 'Haskell'
+    'submenu': [
+      {
+        'label': 'Start Haskell Tools server'
+        'command': 'haskell-tools:start-server'
+      }
+      {
+        'label': 'Refactor'
+        'submenu': [
+          {
+            'label': 'Rename Definition'
+            'command': 'haskell-tools:refactor:rename-definition'
+          }
+          {
+            'label': 'Extract Binding'
+            'command': 'haskell-tools:refactor:extract-binding'
+          }
+          {
+            'label': 'Inline Binding'
+            'command': 'haskell-tools:refactor:inline-binding'
+          }
+          {
+            'label': 'Generate Type Signature'
+            'command': 'haskell-tools:refactor:generate-signature'
+          }
+          {
+            'label': 'Float Out'
+            'command': 'haskell-tools:refactor:float-out'
+          }
+          {
+            'label': 'Organize Imports'
+            'command': 'haskell-tools:refactor:organize-imports'
+          }
+          {
+            'label': 'Organize Extensions'
+            'command': 'haskell-tools:refactor:organize-extensions'
+          }
+          {
+            'label': 'Generate Exports'
+            'command': 'haskell-tools:refactor:generate-exports'
+          }
+        ]
+      }
+      {
+        'label': 'Queries'
+        'submenu': [
+         {
+           'label': 'Jump to definition'
+           'command': 'haskell-tools:queries:jump-to-definition'
+          }
+          {
+            'label':'Find usages'
+            'command': 'haskell-tools:queries:find-usages'
+          }
+        ]
+      }
+      {
+        'label': 'Stop Haskell Tools server'
+        'command': 'haskell-tools:stop-server'
+      }
+      {
+        'label': 'Restart Haskell Tools server'
+        'command': 'haskell-tools:restart-server'
+      }
+      {
+        'label': 'Check Haskell Tools server'
+        'command': 'haskell-tools:check-server'
+      }
+      {
+        'label': 'Undo last refactoring'
+        'command': 'haskell-tools:undo-refactoring'
+      }
+      {
+        'label': 'Settings'
+        'command': 'haskell-tools:settings'
+      }
+      {
+        'label': 'Factory reset'
+        'command': 'haskell-tools:reset-plugin'
+      }
+    ]
+  }
+],
+'context-menu':
+  '.tree-view .header.ht-refactored-header': [
+    {
+      'label': 'Remove from Haskell-tools'
+      'command': 'haskell-tools:toggle-package'
+    }
+    {'type': 'separator'}
+  ]
+  '.tree-view .header:not(.ht-refactored-header)': [
+    {
+      'label': 'Add to Haskell-tools'
+      'command': 'haskell-tools:toggle-package'
+    }
+    {'type': 'separator'}
+  ]
