@@ -43,17 +43,39 @@
           }
         ]
       }
-      'label': 'Refactor project'
-      'submenu': [
-        {
-          'label': 'Organize imports'
-          'command': 'haskell-tools:refactor:project-organize-imports'
-        }
-        {
-          'label': 'Organize extensions'
-          'command': 'haskell-tools:refactor:project-organize-extensions'
-        }
-      ]
+      {
+        'label': 'Queries'
+        'submenu': [
+         {
+           'label': 'Jump to definition'
+           'command': 'haskell-tools:queries:jump-to-definition'
+          }
+          {
+            'label':'Find usages'
+            'command': 'haskell-tools:queries:find-usages'
+          }
+          {
+            'label':'Dispose Usages'
+            'command':'haskell-tools:queries:disp-us'
+          }
+          {
+            'label':'Get Info'
+            'command':'haskell-tools:queries:get-info'
+          }
+          {
+            'label':'Get definitions'
+            'command':'haskell-tools:queries:get-definitions'
+          }
+          {
+            'label':'Extend names'
+            'command':'haskell-tools:queries:get-scope'
+          }
+          {
+            'label':'Get Infos in modul'
+            'command':'haskell-tools:queries:module-infos'
+          }
+        ]
+      }
       {
         'label': 'Stop Haskell Tools server'
         'command': 'haskell-tools:stop-server'

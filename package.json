@@ -6,7 +6,8 @@
     "atom": "*"
   },
   "dependencies": {
-    "atom-space-pen-views": "^2.2.0"
+    "atom-space-pen-views": "^2.2.0",
+    "xregexp":"4.1.1"
   },
   "repository": {
     "type": "git",

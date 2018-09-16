@@ -94,6 +94,7 @@ module.exports = HaskellTools =
       menuManager.enableCommand('haskell-tools:restart-server')
       menuManager.disableCommand('haskell-tools:start-server')
       menuManager.enableCommand('haskell-tools:refactor:.*')
+      menuManager.enableCommand('haskell-tools:queries.*')
       menuManager.enableCommand('haskell-tools:undo-refactoring')
       menuManager.enableCommand('haskell-tools:check-server')
     serverManager.onStopped =>
