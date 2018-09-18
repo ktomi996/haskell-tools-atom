@@ -46,6 +46,9 @@ module.exports = ClientManager =
       'haskell-tools:check-server': => @checkServer()
 
     @subscriptions.add atom.commands.add 'atom-workspace',
+      'haskell-tools:query:highlight-extensions', () => @query 'HighlightExtensions'
+
+    @subscriptions.add atom.commands.add 'atom-workspace',
       'haskell-tools:refactor:rename-definition', () => @refactor 'RenameDefinition'
 
     @subscriptions.add atom.commands.add 'atom-workspace',
@@ -76,22 +79,22 @@ module.exports = ClientManager =
       'haskell-tools:refactor:project-organize-extensions', () => @refactor 'ProjectOrganizeExtensions'
 
     @subscriptions.add atom.commands.add 'atom-workspace',
-      'haskell-tools:queries:jump-to-definition',() => @query 'JumpToDefinition'
+      'haskell-tools:queries:jump-to-definition',() => @dataQuery 'JumpToDefinition'
 
     @subscriptions.add atom.commands.add 'atom-workspace',
-      'haskell-tools:queries:find-usages',() => @query 'GetUsages'
+      'haskell-tools:queries:find-usages',() => @dataQuery 'GetUsages'
 
     @subscriptions.add atom.commands.add 'atom-workspace',
-      'haskell-tools:queries:get-info',() => @query 'GetType'
+      'haskell-tools:queries:get-info',() => @dataQuery 'GetType'
 
     @subscriptions.add atom.commands.add 'atom-workspace',
-      'haskell-tools:queries:get-definitions',() => @query 'DefinedHere'
+      'haskell-tools:queries:get-definitions',() => @dataQuery 'DefinedHere'
 
     @subscriptions.add atom.commands.add 'atom-workspace',
-      'haskell-tools:queries:module-infos',() => @query 'DefinedInfo'
+      'haskell-tools:queries:module-infos',() => @dataQuery 'DefinedInfo'
 
     @subscriptions.add atom.commands.add 'atom-workspace',
-      'haskell-tools:queries:get-scope',() => @query 'GetScope'
+      'haskell-tools:queries:get-scope',() => @dataQuery 'GetScope'
 
     @subscriptions.add atom.commands.add 'atom-workspace',
       'haskell-tools:queries:next-usage',() => @nextUsage()
@@ -187,7 +190,11 @@ module.exports = ClientManager =
             atom.notifications.addError errorMsg, {dismissable : true}
             logger.error errorMsg
         when "QueryResult"
-          console.log data.queryName
+          if data.queryType == "MarkerQuery"
+            markerManager.setErrorMarkers(data.queryResult)
+            tooltipManager.refresh()
+            statusBar.ready()
+
           if data.queryName == "JumpToDefinition" #Jump To Definition
             fileName = (data.queryResult)[0]
             row = (data.queryResult)[1]
@@ -445,6 +452,7 @@ module.exports = ClientManager =
                  -#{@definedinModule[l][2]}
                  :#{@definedinModule[l][3]}"
     @definedinModule = []
+    console.log @currentFileName
     @send {
             'tag':'PerformQuery','query': "GetType"
           , 'modulePath': @currentFileName, 'editorSelection': selection
@@ -494,7 +502,9 @@ module.exports = ClientManager =
 
   #Starts query to server. The query type is the queryName parameter.
   #Sets the necessary datas.
-  query: (queryName) ->
+  dataQuery: (queryName) ->
+    console.log "query"
+    try
      editor = atom.workspace.getActivePaneItem()
      if !editor?
        atom.notifications.addError("The active pane is not .hs file")
@@ -502,7 +512,6 @@ module.exports = ClientManager =
        try
          range = editor.getSelectedScreenRange()
          file = editor.buffer.file.path
-         @currentFileName = file
          colSt = @getCount range.start.row, range.start.column
          colEnd = @getCount range.end.row, range.end.column
          selection = "#{range.start.row + 1}:#{colSt + 1}-#{range.end.row + 1}:#{colEnd + 1}"
@@ -518,9 +527,11 @@ module.exports = ClientManager =
                , 'modulePath': file, 'editorSelection': selection
                , 'details':[], 'shutdownAfter': false
                }
-        catch e
+       catch e
            console.log e
            atom.notifications.addError("The active pane is not .hs file")
+    catch m
+        console.log m
 
   performRefactor: (refactoring, file, range, params) ->
     selection = "#{range.start.row + 1}:#{range.start.column + 1}-#{range.end.row + 1}:#{range.end.column + 1}"
@@ -530,6 +541,38 @@ module.exports = ClientManager =
           }
     statusBar.performRefactoring()
 
+  query: (queryName) ->
+    editor = atom.workspace.getActivePaneItem()
+    if not editor
+      return
+    if editor.isModified()
+      if atom.config.get("haskell-tools.save-before-refactor")
+        editor.save()
+        disp = editor.onDidSave () =>
+                 disp.dispose()
+                 tryAgain = () =>
+                   @query(queryName) # Try again after saving
+                 setTimeout tryAgain, 1000 # wait for the file system to inform Haskell-tools
+                                           # about the change.
+        return
+      else
+        atom.notifications.addError("Can't query unsaved files. Turn-on auto-saving to enable it.")
+        return
+    file = editor.buffer.file.path
+    range = editor.getSelectedBufferRange()
+
+    @performQuery(queryName, file, range, [])
+
+  performQuery: (query, file, range, params) ->
+    selection = "#{range.start.row + 1}:#{range.start.column + 1}-#{range.end.row + 1}:#{range.end.column + 1}"
+    @send { 'tag': 'PerformQuery'
+          , 'query': query
+          , 'modulePath': file
+          , 'editorSelection': selection
+          , 'details': params
+          , 'shutdownAfter': false
+          }
+    statusBar.performQuery()
 
   addPackages: (packages) ->
     if packages.length > 0

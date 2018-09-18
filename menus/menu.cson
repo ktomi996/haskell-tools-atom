@@ -7,6 +7,43 @@
         'command': 'haskell-tools:start-server'
       }
       {
+        'label': 'Queries'
+        'submenu': [
+          {
+            'label': 'Highlight Extensions'
+            'command': 'haskell-tools:query:highlight-extensions'
+          }
+	        {
+           'label': 'Jump to definition'
+           'command': 'haskell-tools:queries:jump-to-definition'
+          }
+          {
+            'label':'Find usages'
+            'command': 'haskell-tools:queries:find-usages'
+          }
+          {
+            'label':'Dispose Usages'
+            'command':'haskell-tools:queries:disp-us'
+          }
+          {
+            'label':'Get Info'
+            'command':'haskell-tools:queries:get-info'
+          }
+          {
+            'label':'Get definitions'
+            'command':'haskell-tools:queries:get-definitions'
+          }
+          {
+            'label':'Extend names'
+            'command':'haskell-tools:queries:get-scope'
+          }
+          {
+            'label':'Get Infos in modul'
+            'command':'haskell-tools:queries:module-infos'
+	        }
+        ]
+      }
+      {
         'label': 'Refactor'
         'submenu': [
           {
@@ -44,35 +81,16 @@
         ]
       }
       {
-        'label': 'Queries'
+
+        'label': 'Refactor project'
         'submenu': [
-         {
-           'label': 'Jump to definition'
-           'command': 'haskell-tools:queries:jump-to-definition'
+          {
+            'label': 'Organize imports'
+            'command': 'haskell-tools:refactor:project-organize-imports'
           }
           {
-            'label':'Find usages'
-            'command': 'haskell-tools:queries:find-usages'
-          }
-          {
-            'label':'Dispose Usages'
-            'command':'haskell-tools:queries:disp-us'
-          }
-          {
-            'label':'Get Info'
-            'command':'haskell-tools:queries:get-info'
-          }
-          {
-            'label':'Get definitions'
-            'command':'haskell-tools:queries:get-definitions'
-          }
-          {
-            'label':'Extend names'
-            'command':'haskell-tools:queries:get-scope'
-          }
-          {
-            'label':'Get Infos in modul'
-            'command':'haskell-tools:queries:module-infos'
+            'label': 'Organize extensions'
+            'command': 'haskell-tools:refactor:project-organize-extensions'
           }
         ]
       }
