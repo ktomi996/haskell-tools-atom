@@ -452,13 +452,11 @@ module.exports = ClientManager =
                  -#{@definedinModule[l][2]}
                  :#{@definedinModule[l][3]}"
     @definedinModule = []
-    console.log @currentFileName
     @send {
             'tag':'PerformQuery','query': "GetType"
           , 'modulePath': @currentFileName, 'editorSelection': selection
           , 'details':[], 'shutdownAfter': false
           }
-    console.log selection
 
   #Returns the length of string
   #The unicode symbols counted only one length
@@ -503,7 +501,6 @@ module.exports = ClientManager =
   #Starts query to server. The query type is the queryName parameter.
   #Sets the necessary datas.
   dataQuery: (queryName) ->
-    console.log "query"
     try
      editor = atom.workspace.getActivePaneItem()
      if !editor?
