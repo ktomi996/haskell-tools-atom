@@ -7,7 +7,8 @@
   },
   "dependencies": {
     "atom-space-pen-views": "^2.2.0",
-    "xregexp":"4.1.1"
+    "punycode": "^2.1.1",
+    "xregexp": "^4.1.1"
   },
   "repository": {
     "type": "git",

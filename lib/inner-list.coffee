@@ -7,7 +7,6 @@ module.exports = class InnerListView extends SelectListView
  client:null
  fileName:null
  outerItems:null
- confirm
  initialize:(items,editor,fileName,outerItems,client) ->
    @edit = editor
    @fileName = fileName
