@@ -511,7 +511,7 @@ module.exports = ClientManager =
          colSt = @getCount range.start.row, range.start.column
          colEnd = @getCount range.end.row, range.end.column
          selection = "#{range.start.row + 1}:#{colSt + 1}-#{range.end.row + 1}:#{colEnd + 1}"
-         if queryName == "DefinedInfo"
+         if queryName == "DefinedInfo" || queryName == "DefinedHere" || queryName == "GetUsages"
             @currentFileName = file
          else if queryName == "GetScope"
               if (range.start.row != range.end.row || colSt != colEnd)
